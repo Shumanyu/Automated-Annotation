@@ -1,3 +1,4 @@
+python3-distutils
 cat > apt.txt <<EOF
 tesseract-ocr
 ffmpeg
