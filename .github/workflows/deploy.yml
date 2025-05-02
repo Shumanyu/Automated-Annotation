@@ -1,0 +1,24 @@
+name: Deploy Streamlit App
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y tesseract-ocr ffmpeg libgl1-mesa-glx libglib2.0-0
+          pip install -r requirements.txt
+
+      - name: Run tests or lint (optional)
+        run: echo "Add your tests here"
+
+      - name: Start Streamlit
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: streamlit run streamlit_app.py --server.port 8501
