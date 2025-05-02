@@ -1,4 +1,7 @@
+cat > apt.txt <<EOF
 tesseract-ocr
 ffmpeg
-libgl1-mesa-glx
+libgl1
+libgl1-mesa-dri
 libglib2.0-0
+EOF
