@@ -1,0 +1,10 @@
+streamlit>=1.18.0
+opencv-python-headless
+pytesseract
+Pillow
+whisper-openai
+transformers
+torch
+openai
+yolov5
+fpdf
