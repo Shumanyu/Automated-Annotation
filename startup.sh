@@ -1,2 +1,2 @@
 #!/usr/bin/env basH
-pip install opencv-python-headless
+pip install --upgrade pip opencv-python-headless
