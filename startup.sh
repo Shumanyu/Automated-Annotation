@@ -1,3 +1,2 @@
-#!/usr/bin/env bash
-pip uninstall -y opencv-python
+#!/usr/bin/env basH
 pip install opencv-python-headless
