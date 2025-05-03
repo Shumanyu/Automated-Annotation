@@ -1,4 +1,5 @@
 numpy>=1.25
+opencv-python-faceless
 moviepy 
 imageio-ffmpeg
 streamlit>=1.18.0
