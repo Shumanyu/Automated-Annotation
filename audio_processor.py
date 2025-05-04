@@ -26,12 +26,8 @@ def extract_audio_and_transcribe(video_path):
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-
-    # Transcribe with Whisper
     result = _model.transcribe(temp_wav.name)
 
-    # Cleanup temporary file
     os.remove(temp_wav.name)
 
-    # Return transcript
     return result.get("text", "").strip()
