@@ -5,7 +5,7 @@ from pathlib import Path
 pytesseract.pytesseract.tesseract_cmd = os.getenv(
     'TESSERACT_CMD', pytesseract.pytesseract.tesseract_cmd
 )
-
+#has errors need correction
 CACHE_DIR = Path(".cache_videos")
 CACHE_DIR.mkdir(exist_ok=True)
 
