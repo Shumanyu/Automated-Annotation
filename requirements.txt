@@ -1,8 +1,8 @@
-numpy>=1.25
+numpy
 opencv-python-headless
 moviepy 
 imageio-ffmpeg
-streamlit>=1.18.0
+streamlit
 pytesseract
 Pillow
 whisper-openai
