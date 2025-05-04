@@ -2,8 +2,6 @@ import cv2
 import pytesseract
 import os
 from pathlib import Path
-
-# Allow overriding the Tesseract executable via environment variable
 pytesseract.pytesseract.tesseract_cmd = os.getenv(
     'TESSERACT_CMD', pytesseract.pytesseract.tesseract_cmd
 )
@@ -41,5 +39,5 @@ def extract_frames_and_ocr(video_path: str, interval: int = 30) -> str:
                 texts.append(f"[{timestamp:.1f}s] {text.strip()}")
         frame_idx += 1
     cap.release()
-    # Join all extracted texts with newline separators
-    return "".join(texts)
+    return "
+            ".join(texts)
