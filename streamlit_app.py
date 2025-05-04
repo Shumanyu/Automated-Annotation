@@ -127,12 +127,12 @@ if video_file:
         progress.progress(step/step_count)
         log_event("keyframes_done") if enable_analysis else None
 
-    # --- Export JSON ---
-    if "json" in export_formats:
+    # --- Export JSON --- no need    
+   ''' if "json" in export_formats:
         json_bytes = export_json(results)
         st.download_button("Download All Results JSON", json_bytes, file_name="results.json")
         log_event("export_json") if enable_analysis else None
-
+'''
     # Cleanup
     os.remove(temp_path)
 
