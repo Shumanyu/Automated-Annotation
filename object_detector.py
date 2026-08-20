@@ -1,22 +1,44 @@
+from functools import lru_cache
+
 import cv2
-import tempfile
-import yolov5
+
+
+@lru_cache(maxsize=3)
+def _load_model(model_name):
+    """Load and cache YOLO weights.
+
+    The model used to be re-read from disk on every call.
+    """
+    import yolov5
+
+    # The yolov5 package resolves weights by filename, not by bare model name.
+    return yolov5.load(f"{model_name}.pt")
+
 
 def detect_objects_in_frame(video_path, interval, model_name):
-    model = yolov5.load(model_name)
+    interval = max(int(interval), 1)
+    model = _load_model(model_name)
+
     cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS) or 1
+    if not cap.isOpened():
+        raise RuntimeError(f"Could not open video: {video_path}")
+
     idx = 0
     results = []
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            break
-        if idx % interval == 0:
-            detections = model(frame).pandas().xyxy[0]
-            labels = detections['name'].tolist()
-            _, buf = cv2.imencode('.jpg', frame)
-            results.append((buf.tobytes(), labels))
-        idx += 1
-    cap.release()
+    try:
+        while True:
+            # grab() advances without decoding, so skipped frames stay cheap.
+            if not cap.grab():
+                break
+            if idx % interval == 0:
+                ret, frame = cap.retrieve()
+                if not ret:
+                    break
+                detections = model(frame).pandas().xyxy[0]
+                labels = detections['name'].tolist()
+                _, buf = cv2.imencode('.jpg', frame)
+                results.append((buf.tobytes(), labels))
+            idx += 1
+    finally:
+        cap.release()
     return results
