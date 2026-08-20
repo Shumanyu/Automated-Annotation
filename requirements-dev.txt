@@ -1,0 +1,9 @@
+# Lightweight deps for the test job. Deliberately excludes torch, whisper and
+# yolov5 so CI does not pull several GB to run the pure-logic tests.
+pytest>=8.0
+ruff>=0.6
+fpdf2>=2.7
+numpy>=1.26,<3
+opencv-python-headless>=4.9
+pytesseract>=0.3.10
+streamlit>=1.40

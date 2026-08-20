@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install test dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Syntax check every module
+        # The breakage that sat on main was a plain SyntaxError, so this gate
+        # runs first and covers every file, including ones with heavy imports.
+        run: python -m compileall -q .
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Test
+        run: pytest -q
