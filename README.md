@@ -14,7 +14,7 @@ Everything runs locally except the optional GPT summarizer.
 | Audio transcription | OpenAI Whisper (local) | ffmpeg extracts 16kHz mono audio first |
 | Summarization | BART / T5 locally, or GPT via API | Only the selected model is downloaded |
 | Keyword search | stdlib `re` | Reports the timestamp each hit falls under |
-| Object detection | YOLOv5 | Optional; off by default |
+| Object detection | YOLOv5 | Off by default, [separate install](#optional-object-detection) |
 | Keyframe gallery | OpenCV | Evenly spaced samples |
 | Export | `fpdf2`, JSON, plain text | Choose formats in the sidebar |
 
@@ -56,6 +56,40 @@ streamlit run streamlit_app.py
 
 The app opens at <http://localhost:8501>. Upload a video, pick your stages in
 the sidebar, and results appear as each stage finishes.
+
+### Optional: object detection
+
+YOLOv5 is kept out of `requirements.txt` on purpose. It depends on
+`opencv-python` — the **non-headless** build — which installs over the top of
+`opencv-python-headless` and then requires `libGL` at import time. That
+combination is what broke the Streamlit Cloud deploy. It also pins
+`huggingface-hub<0.25`, holding `transformers` back several major versions.
+
+Object detection is off by default, and the app reports an actionable message
+in-page if you enable it without the dependency. To turn it on:
+
+```bash
+pip install -r requirements-optional.txt
+```
+
+If you deploy with it, add `libsm6`, `libxext6` and `libxrender1` to
+`packages.txt` as well.
+
+## Deploying to Streamlit Community Cloud
+
+System packages must be listed in **`packages.txt`** at the repository root.
+Streamlit Cloud does not read `apt.txt` — that is the Heroku/Render
+convention, and a file by that name is silently ignored, which leaves
+Tesseract, ffmpeg and the OpenCV shared libraries missing at runtime.
+
+Python dependencies come from `requirements.txt`. Streamlit Cloud checks
+`uv.lock`, `Pipfile`, `environment.yml`, `requirements.txt`, then
+`pyproject.toml`, and uses only the first it finds — so the `pyproject.toml`
+here (lint and test config) is never mistaken for a dependency manifest.
+
+Note that the full stack — torch, Whisper and transformers — is large for the
+Community Cloud tier. If you hit resource limits, set `WHISPER_MODEL=tiny`
+and prefer the OpenAI summarizer over the local BART weights.
 
 ## Configuration
 

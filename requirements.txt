@@ -7,5 +7,4 @@ openai-whisper>=20231117
 transformers>=4.40
 torch>=2.2
 openai>=1.30
-yolov5>=7.0
 fpdf2>=2.7
