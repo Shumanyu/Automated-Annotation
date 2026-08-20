@@ -1,0 +1,18 @@
+# Object detection, installed separately on purpose.
+#
+# yolov5 depends on opencv-python (the non-headless build). Installed alongside
+# opencv-python-headless it overwrites the same cv2 directory, and the result
+# needs libGL at import time -- which is what broke the Streamlit Cloud deploy.
+# It also pins huggingface-hub<0.25, which drags transformers backwards.
+#
+# Object detection is off by default in the UI, and the app reports a clear
+# message in-page when this is not installed, so the base deploy stays small.
+#
+#   pip install -r requirements-optional.txt
+#
+# If you install this, add these to packages.txt as well, since the
+# non-headless build links against them:
+#   libsm6
+#   libxext6
+#   libxrender1
+yolov5>=7.0

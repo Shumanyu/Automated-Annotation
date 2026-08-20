@@ -9,7 +9,16 @@ def _load_model(model_name):
 
     The model used to be re-read from disk on every call.
     """
-    import yolov5
+    try:
+        import yolov5
+    except ImportError as exc:
+        # yolov5 is intentionally not in requirements.txt: it depends on the
+        # non-headless opencv build, which overwrites opencv-python-headless
+        # and then needs libGL at import time.
+        raise RuntimeError(
+            "Object detection needs the optional yolov5 dependency. Install it "
+            "with: pip install -r requirements-optional.txt"
+        ) from exc
 
     # The yolov5 package resolves weights by filename, not by bare model name.
     return yolov5.load(f"{model_name}.pt")
